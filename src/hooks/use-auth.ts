@@ -10,7 +10,7 @@ const useAuthHook=()=>{
     const login=async(payload:Payload)=>{
         try{
             const res=await apiClient.post("/auth/login",payload);
-            console.log("res");
+            // console.log("res");
             return res.data;
         }catch(error){
             return error;

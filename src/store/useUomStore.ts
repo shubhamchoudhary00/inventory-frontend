@@ -30,7 +30,7 @@ const useUomStore=create<Props>((set,get)=>({
             set({loading:true})
             try{
                 const res=await apiClient.get("/uom");
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 set({uoms:res.data.data});
 
             }catch(error){
@@ -49,7 +49,7 @@ const useUomStore=create<Props>((set,get)=>({
             set({loading:true})
             try{
                 const res=await apiClient.get("/uom");
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 set({uoms:res.data.data});
             }catch(error){
                 console.log(error);

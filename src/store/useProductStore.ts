@@ -26,7 +26,7 @@ const useProductStore=create<Props>((set,get)=>({
             set({loading:true})
             try{
                 const res=await apiClient.get("/products");
-                console.log("products",res.data);
+                // console.log("products",res.data);
                 set({products:res.data.data})
             }catch(error){
                 console.log(error);
@@ -46,7 +46,7 @@ const useProductStore=create<Props>((set,get)=>({
             set({loading:true})
             try{
                 const res=await apiClient.get("/products");
-                console.log("products",res.data);
+                // console.log("products",res.data);
                 set({products:res.data.data})
             }catch(error){
                 console.log(error);

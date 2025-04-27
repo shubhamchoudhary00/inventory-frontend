@@ -30,8 +30,8 @@ const useDashboardStore=create<Props>((set,get)=>({
             set({loading:true})
             try{
                 const [res1,res2]=await Promise.all([apiClient.get("/dashboard"),apiClient.get("/dashboard/analytics")]);
-                console.log("data",res1.data);
-                console.log("data",res2.data);
+                // console.log("data",res1.data);
+                // console.log("data",res2.data);
                 set({data:res1.data.data,analyticsData:res2.data.data})
             }catch(error){
                 console.log(error);
@@ -51,8 +51,8 @@ const useDashboardStore=create<Props>((set,get)=>({
             set({loading:true})
             try{
                 const [res1,res2]=await Promise.all([apiClient.get("/dashboard"),apiClient.get("/dashboard/analytics")]);
-                console.log("data",res1.data);
-                console.log("data",res2.data);
+                // console.log("data",res1.data);
+                // console.log("data",res2.data);
                 set({data:res1.data.data,analyticsData:res2.data.data})
             }catch(error){
                 console.log(error);

@@ -35,7 +35,7 @@ const useCategoryStore=create<Props>((set,get)=>({
             set({loading:true})
             try{
                 const [res1,res2]=await Promise.all([apiClient.get("/category"),apiClient.get("/sub-category")]);
-                console.log("res",res1.data.data)
+                // console.log("res",res1.data.data)
                 if(res1.data.data){
                     set({categories:res1.data.data})
                 }
@@ -63,7 +63,7 @@ const useCategoryStore=create<Props>((set,get)=>({
 
             try{
                 const [res1,res2]=await Promise.all([apiClient.get("/category"),apiClient.get("/sub-category")]);
-                console.log("res",res1.data.data)
+                // console.log("res",res1.data.data)
                 if(res1.data.data){
                     set({categories:res1.data.data})
                 }

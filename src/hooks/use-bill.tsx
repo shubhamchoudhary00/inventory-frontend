@@ -33,7 +33,7 @@ const useBill = (): UseBillReturn => {
     setLoading(true);
     try {
       const res = await apiClient.get<IBiill[]>("/bills");
-      console.log(res.data);
+    //   console.log(res.data);
       return res.data;
     } catch (err: unknown) {
       const error = err as AxiosError<ApiErrorResponse>;
@@ -51,7 +51,7 @@ const useBill = (): UseBillReturn => {
     setLoading(true);
     try {
       const res = await apiClient.post<BillResponse>("/bills", payload);
-      console.log(res.data);
+    //   console.log(res.data);
 
       // Handle PDF download if available
       if (res.data.pdfData) {
@@ -86,7 +86,7 @@ const useBill = (): UseBillReturn => {
     setLoading(true);
     try {
       const res = await apiClient.get<BillResponse>(`/bills/${id}`);
-      console.log("res", res.data);
+    //   console.log("res", res.data);
       if (res.data.pdfData) {
         // Convert base64 to blob
         const pdfBlob = base64ToBlob(res.data.pdfData, "application/pdf");

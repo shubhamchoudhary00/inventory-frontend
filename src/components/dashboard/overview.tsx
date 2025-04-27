@@ -75,7 +75,7 @@ const Overview: React.FC = () => {
   // Set state from dashboard data
   useEffect(() => {
     if (data) {
-      console.log(data);
+      // console.log(data);
       setCurrentMonth(data.currentMonth || null);
       setMonthWise(data.monthWise || null);
       setToday(data.today || null);

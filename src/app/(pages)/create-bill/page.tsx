@@ -204,7 +204,7 @@ useEffect(()=>{
     };
 
     const res = await addBill(payload);
-    console.log("res", res);
+    // console.log("res", res);
 
     if (res && res.success) {
       toast.success("Bill generated successfully");

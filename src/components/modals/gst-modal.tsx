@@ -43,7 +43,7 @@ export default function UOMModal({ isOpen, onClose }: UOMModalProps) {
     }
   
     const res = await addUom(uomData);
-    console.log("res", res);
+    // console.log("res", res);
   
     if (res instanceof Error) {
       toast.error("Something went wrong");

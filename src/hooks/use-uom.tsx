@@ -31,7 +31,7 @@ const useUom = (): UseUomReturn => {
     setLoading(true);
     try {
       const res = await apiClient.get<IUom[]>("/uom");
-      console.log(res.data);
+    //   console.log(res.data);
       setData(res.data);
       return res.data;
     } catch (err: unknown) {
@@ -49,7 +49,7 @@ const useUom = (): UseUomReturn => {
   const addUom = async (payload: Partial<IUom>): Promise<IUom | Error> => {
     try {
       const res = await apiClient.post<IUom>("/uom", payload);
-      console.log(res.data);
+    //   console.log(res.data);
       return res.data;
     } catch (err: unknown) {
       const error = err as AxiosError<ApiErrorResponse>;

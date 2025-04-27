@@ -26,7 +26,7 @@ const useBillStore=create<Props>((set,get)=>({
             set({loading:true})
             try{
                 const res=await apiClient.get("/bills");
-                console.log("bills",res.data);
+                // console.log("bills",res.data);
                 set({bills:res.data.data})
             }catch(error){
                 console.log(error);
@@ -46,7 +46,7 @@ const useBillStore=create<Props>((set,get)=>({
             set({loading:true})
             try{
                 const res=await apiClient.get("/bills");
-                console.log("products",res.data);
+                // console.log("products",res.data);
                 set({bills:res.data.data})
             }catch(error){
                 console.log(error);
