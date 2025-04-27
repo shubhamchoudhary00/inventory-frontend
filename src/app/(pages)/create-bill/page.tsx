@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { IBiill, IBillProduct, Items } from "@/interfaces/IBill";
 import { IProduct } from "@/interfaces/IProduct";
 import { IUom } from "@/interfaces/IUom";
+import useBillStore from "@/store/useBillStore";
 
 // Define interfaces for data structures
 
@@ -60,7 +61,8 @@ interface BillSummary {
 
 
 const CreateBillPage: React.FC = () => {
-  const { products, loading,  refetch } = useProductStore();
+  const { products, loading,refetch,  initalize } = useProductStore();
+  const {refetch:billRefetch}=useBillStore();
   const [billType, setBillType] = useState<"local" | "interstate">("local");
   const [gstStatus, setGstStatus] = useState<"withGst" | "withoutGst">("withGst");
   const router = useRouter();
@@ -74,9 +76,10 @@ const CreateBillPage: React.FC = () => {
 
   const { addBill } = useBill();
 
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
+useEffect(()=>{
+  if(products) return;
+  initalize();
+},[])
 
   const handleAddItem = () => {
     setItems([...items, { product: null, quantity: 1 }]);
@@ -206,6 +209,8 @@ const CreateBillPage: React.FC = () => {
     if (res && res.success) {
       toast.success("Bill generated successfully");
       reset();
+      billRefetch();
+      refetch()
       return;
     }
     toast.error("Something went wrong");

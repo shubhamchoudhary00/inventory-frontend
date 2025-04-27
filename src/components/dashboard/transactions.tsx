@@ -147,7 +147,7 @@ const Transactions: React.FC<Props> = () => {
                       </td>
                       <td className="px-4 py-3 text-right">₹{transaction.summary.total}</td>
                       <td className="px-4 py-3 text-right">
-                        {calculateTax(Number(transaction.summary.total))}
+                        {calculateTax(Number(transaction.summary.totalTax))}
                       </td>
                       <td className="px-4 py-3 text-center">
                         <div className="flex justify-center space-x-2">
