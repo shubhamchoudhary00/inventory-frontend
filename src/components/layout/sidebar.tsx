@@ -26,9 +26,17 @@ const Sidebar = () => {
     setOpenDialog("");
   };
 
-  // Handler for GST data when saved
+  const handleLogout=()=>{
+    localStorage.clear();
+    router.push("/");
+    router.refresh()
+  }
 
+  const handleTab=(data:string)=>{
+    setActiveTab(data);
+    router.push("/dashboard");
 
+  }
   return (
     <aside
     className={`fixed left-0 top-0 z-40 h-screen w-64 bg-white shadow-sm transition-transform ${
@@ -69,7 +77,7 @@ const Sidebar = () => {
       <Button
         variant={activeTab === "overview" ? "secondary" : "ghost"}
         className="justify-start"
-        onClick={() => setActiveTab("overview")}
+        onClick={() => handleTab("overview")}
       >
         <Home className="mr-2 h-4 w-4" />
         Overview
@@ -77,7 +85,7 @@ const Sidebar = () => {
       <Button
         variant={activeTab === "analytics" ? "secondary" : "ghost"}
         className="justify-start"
-        onClick={() => setActiveTab("analytics")}
+        onClick={() => handleTab("analytics")}
       >
         <BarChart3 className="mr-2 h-4 w-4" />
         Analytics
@@ -85,7 +93,7 @@ const Sidebar = () => {
       <Button
         variant={activeTab === "products" ? "secondary" : "ghost"}
         className="justify-start"
-        onClick={() => setActiveTab("products")}
+        onClick={() => handleTab("products")}
       >
         <Package className="mr-2 h-4 w-4" />
         Products
@@ -93,7 +101,7 @@ const Sidebar = () => {
       <Button
         variant={activeTab === "transactions" ? "secondary" : "ghost"}
         className="justify-start"
-        onClick={() => setActiveTab("transactions")}
+        onClick={() => handleTab("transactions")}
       >
         <Receipt className="mr-2 h-4 w-4" />
         Transactions
@@ -193,7 +201,7 @@ const Sidebar = () => {
       </div>
 
       <div className="mt-auto pt-4">
-        <Button variant="ghost" className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50">
+        <Button variant="ghost" className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50" onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           Log Out
         </Button>

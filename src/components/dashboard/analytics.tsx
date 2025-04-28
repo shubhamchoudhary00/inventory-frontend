@@ -2,13 +2,13 @@
 import React, { useEffect } from "react";
 import { TabsContent } from "../ui/tabs";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "../ui/select";
 import {
   Bar,
   BarChart,
@@ -97,7 +97,7 @@ const Analytics: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Sales Trend</CardTitle>
-            <Select defaultValue="monthly">
+            {/* <Select defaultValue="monthly">
               <SelectTrigger className="w-36">
                 <SelectValue placeholder="Select view" />
               </SelectTrigger>
@@ -107,7 +107,7 @@ const Analytics: React.FC = () => {
                 <SelectItem value="monthly">Monthly</SelectItem>
                 <SelectItem value="yearly">Yearly</SelectItem>
               </SelectContent>
-            </Select>
+            </Select> */}
           </CardHeader>
           <CardContent>
             <div className="h-96">

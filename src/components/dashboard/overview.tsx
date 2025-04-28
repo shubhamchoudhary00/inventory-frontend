@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { TabsContent } from "../ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
-  ArrowUpRight,
+  
   BarChart3,
   Box,
   LineChartIcon,
@@ -118,11 +118,11 @@ const Overview: React.FC = () => {
               <div className="text-2xl font-bold">
                 ₹{today?.withTax?.toLocaleString("en-IN") || 0}
               </div>
-              <div className="text-xs text-muted-foreground flex items-center mt-1">
+              {/* <div className="text-xs text-muted-foreground flex items-center mt-1">
                 <ArrowUpRight className="mr-1 h-3 w-3 text-green-500" />
                 <span className="text-green-500">12%</span>
                 <span className="ml-1">from yesterday</span>
-              </div>
+              </div> */}
             </CardContent>
           </Card>
           <Card>
@@ -136,11 +136,11 @@ const Overview: React.FC = () => {
               <div className="text-2xl font-bold">
                 ₹{today?.withoutTax?.toLocaleString("en-IN") || 0}
               </div>
-              <div className="text-xs text-muted-foreground flex items-center mt-1">
+              {/* <div className="text-xs text-muted-foreground flex items-center mt-1">
                 <ArrowUpRight className="mr-1 h-3 w-3 text-green-500" />
                 <span className="text-green-500">10%</span>
                 <span className="ml-1">from yesterday</span>
-              </div>
+              </div> */}
             </CardContent>
           </Card>
           <Card>
@@ -154,11 +154,11 @@ const Overview: React.FC = () => {
               <div className="text-2xl font-bold">
                 ₹{currentMonth?.withTax?.toLocaleString("en-IN") || 0}
               </div>
-              <div className="text-xs text-muted-foreground flex items-center mt-1">
+              {/* <div className="text-xs text-muted-foreground flex items-center mt-1">
                 <ArrowUpRight className="mr-1 h-3 w-3 text-green-500" />
                 <span className="text-green-500">18%</span>
                 <span className="ml-1">from last month</span>
-              </div>
+              </div> */}
             </CardContent>
           </Card>
           <Card>
@@ -172,11 +172,11 @@ const Overview: React.FC = () => {
               <div className="text-2xl font-bold">
                 ₹{currentMonth?.withoutTax?.toLocaleString("en-IN") || 0}
               </div>
-              <div className="text-xs text-muted-foreground flex items-center mt-1">
+              {/* <div className="text-xs text-muted-foreground flex items-center mt-1">
                 <ArrowUpRight className="mr-1 h-3 w-3 text-green-500" />
                 <span className="text-green-500">15%</span>
                 <span className="ml-1">from last month</span>
-              </div>
+              </div> */}
             </CardContent>
           </Card>
         </div>
