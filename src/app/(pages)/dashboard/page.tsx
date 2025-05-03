@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { Tabs,  TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import Overview from "@/components/dashboard/overview";
-import Analytics from "@/components/dashboard/analytics";
 import Products from "@/components/dashboard/products";
 import Transactions from "@/components/dashboard/transactions";
 import Customer from "@/components/dashboard/customer";
@@ -166,7 +165,7 @@ export default function Dashboard() {
             <Overview />
 
             
-            <Analytics />
+            {/* <Analytics /> */}
 
             <Products handleOpenDialog={handleOpenDialog} />
 

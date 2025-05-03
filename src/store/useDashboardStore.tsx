@@ -20,19 +20,19 @@ const useDashboardStore=create<Props>((set,get)=>({
     error:"",
     loading:false,
     initalize:()=>{
-        const {data,analyticsData}=get();
+        const {data}=get();
 
-        if(data && analyticsData){
+        if(data ){
             return;
         }
 
         const getData=async()=>{
             set({loading:true})
             try{
-                const [res1,res2]=await Promise.all([apiClient.get("/dashboard"),apiClient.get("/dashboard/analytics")]);
+                const [res1]=await Promise.all([apiClient.get("/dashboard")]);
                 // console.log("data",res1.data);
                 // console.log("data",res2.data);
-                set({data:res1.data.data,analyticsData:res2.data.data})
+                set({data:res1.data.data,analyticsData:null})
             }catch(error){
                 console.log(error);
                 if(error instanceof Error)
@@ -50,10 +50,10 @@ const useDashboardStore=create<Props>((set,get)=>({
         const getData=async()=>{
             set({loading:true})
             try{
-                const [res1,res2]=await Promise.all([apiClient.get("/dashboard"),apiClient.get("/dashboard/analytics")]);
+                const [res1]=await Promise.all([apiClient.get("/dashboard")]);
                 // console.log("data",res1.data);
                 // console.log("data",res2.data);
-                set({data:res1.data.data,analyticsData:res2.data.data})
+                set({data:res1.data.data,analyticsData:null})
             }catch(error){
                 console.log(error);
                 if(error instanceof Error)
