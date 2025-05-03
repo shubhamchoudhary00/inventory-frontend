@@ -106,9 +106,7 @@ const Products = ({ handleOpenDialog }: { handleOpenDialog: (data: string) => vo
                   <th scope="col" className="px-4 py-3 text-left">
                     Product Name
                   </th>
-                  <th scope="col" className="px-4 py-3 text-left">
-                    Category
-                  </th>
+                 
                   <th scope="col" className="px-4 py-3 text-right">
                     Price
                   </th>
@@ -132,7 +130,7 @@ const Products = ({ handleOpenDialog }: { handleOpenDialog: (data: string) => vo
                     <tr key={item._id} className="border-b hover:bg-gray-50">
                       <td className="px-4 py-3">{item._id.slice(6)}</td>
                       <td className="px-4 py-3 font-medium">{item.productName}</td>
-                      <td className="px-4 py-3">{item.category?.name?.toUpperCase() || "N/A"}</td>
+                      {/* <td className="px-4 py-3">{item.category?.name?.toUpperCase() || "N/A"}</td> */}
                       <td className="px-4 py-3 text-right">
                         {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.price)}
                       </td>

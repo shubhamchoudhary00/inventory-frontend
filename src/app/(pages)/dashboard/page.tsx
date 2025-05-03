@@ -156,7 +156,7 @@ export default function Dashboard() {
           <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="mb-8 grid w-full grid-cols-2 lg:flex lg:w-auto">
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              {/* <TabsTrigger value="analytics">Analytics</TabsTrigger> */}
               <TabsTrigger value="products">Products</TabsTrigger>
               <TabsTrigger value="transactions">Transactions</TabsTrigger>
               {/* <TabsTrigger value="customers">Customers</TabsTrigger>

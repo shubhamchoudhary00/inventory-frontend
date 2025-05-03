@@ -1,10 +1,9 @@
 "use client"
 import React, { useState } from 'react'
 import { Button } from '../ui/button'
-import { BarChart3, Folder, FolderPlus, Home, LogOut, Package, Percent, Plus, Receipt} from 'lucide-react'
+import {  Home, LogOut, Package, Percent, Plus, Receipt} from 'lucide-react'
 import { Dialog,  DialogTrigger } from '../ui/dialog'
-import SubCategoryModal from '../modals/sub-category.modal'
-import CategoryModal from '../modals/category-modal'
+
 import ProductModal from '../modals/product.modal'
 import useStore from '@/store/useStore'
 import { useRouter } from 'next/navigation'
@@ -82,14 +81,14 @@ const Sidebar = () => {
         <Home className="mr-2 h-4 w-4" />
         Overview
       </Button>
-      <Button
+      {/* <Button
         variant={activeTab === "analytics" ? "secondary" : "ghost"}
         className="justify-start"
         onClick={() => handleTab("analytics")}
       >
         <BarChart3 className="mr-2 h-4 w-4" />
         Analytics
-      </Button>
+      </Button> */}
       <Button
         variant={activeTab === "products" ? "secondary" : "ghost"}
         className="justify-start"
@@ -141,7 +140,7 @@ const Sidebar = () => {
           <ProductModal handleCloseDialog={handleCloseDialog} />
         </Dialog>
 
-        <Dialog open={openDialog === "addCategory"}>
+        {/* <Dialog open={openDialog === "addCategory"}>
           <DialogTrigger asChild>
             <Button
               variant="ghost"
@@ -153,9 +152,9 @@ const Sidebar = () => {
             </Button>
           </DialogTrigger>
           <CategoryModal handleCloseDialog={handleCloseDialog} />
-        </Dialog>
+        </Dialog> */}
 
-        <Dialog open={openDialog === "addSubcategory"}>
+        {/* <Dialog open={openDialog === "addSubcategory"}>
           <DialogTrigger asChild>
             <Button
               variant="ghost"
@@ -167,7 +166,7 @@ const Sidebar = () => {
             </Button>
           </DialogTrigger>
         <SubCategoryModal handleCloseDialog={handleCloseDialog} />
-        </Dialog>
+        </Dialog> */}
 
         {/* GST Button - Now opens the new GSTModal component */}
         <Button

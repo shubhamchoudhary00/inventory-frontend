@@ -200,7 +200,7 @@ const Overview: React.FC = () => {
                   </span>
                 </div>
                 <div className="mt-1 flex items-center justify-between text-sm">
-                  <span className="text-gray-500">Tax Amount</span>
+                  <span className="text-gray-500">With Tax Amount</span>
                   <span className="text-gray-500">
                     ₹{today.withTax.toLocaleString("en-IN")}
                   </span>
@@ -232,7 +232,7 @@ const Overview: React.FC = () => {
                   </span>
                 </div>
                 <div className="mt-1 flex items-center justify-between text-sm">
-                  <span className="text-gray-500">Tax Amount</span>
+                  <span className="text-gray-500">With Tax Amount</span>
                   <span className="text-gray-500">
                     ₹{currentMonth.withTax.toLocaleString("en-IN")}
                   </span>

@@ -16,8 +16,7 @@ import { Loader2 } from "lucide-react";
 import useProducts from "@/hooks/use-product";
 import useProductStore from "@/store/useProductStore";
 import { IProduct } from "@/interfaces/IProduct";
-import { ICategory } from "@/interfaces/ICategory";
-import { ISubCategory } from "@/interfaces/ISubCategory";
+
 import { IUom } from "@/interfaces/IUom";
 
 
@@ -34,8 +33,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
   const { products,refetch } = useProductStore();
   const [product, setProduct] = useState<IProduct | undefined>(undefined);
   const [formData, setFormData] = useState({
-    category: null as { value: string; label: string } | null,
-    subCategory: null as { value: string; label: string } | null,
     productName: "",
     price: "",
     unitOfMeasure: "",
@@ -57,12 +54,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
   useEffect(() => {
     if (product && categories && subCategories && uoms) {
       setFormData({
-        category: product.category
-        ? (typeof product.category === 'string' ? null : { value: product.category._id, label: product.category.name })
-        : null,
-      subCategory: product.subCategory
-        ? (typeof product.subCategory === 'string' ? null : { value: product.subCategory._id, label: product.subCategory.name })
-        : null,
+      
         productName: product.productName || "",
         price: product.price?.toString() || "",
         unitOfMeasure: typeof product.unitOfMeasure === 'object' ? product.unitOfMeasure?._id || "" : product.unitOfMeasure || "",
@@ -83,7 +75,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
     setFormData((prev) => ({
       ...prev,
       [field]: value,
-      ...(field === "category" ? { subCategory: null } : {}),
     }));
   };
 
@@ -92,9 +83,9 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
   };
 
   const handleSubmit = async () => {
-    const { category, subCategory, productName, price, unitOfMeasure, hsnSacCode, gstRate, stock } = formData;
+    const { productName, price, unitOfMeasure, hsnSacCode, gstRate, stock } = formData;
 
-    if (!category || !subCategory || !productName || !price || !unitOfMeasure || !hsnSacCode || !gstRate || !stock) {
+    if ( !productName || !price || !unitOfMeasure || !hsnSacCode || !gstRate || !stock) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -109,8 +100,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
     }
 
     const data:Partial<IProduct> = {
-      category: category.value,
-      subCategory: subCategory.value,
+ 
       productName,
       price: parsedPrice,
       unitOfMeasure,
@@ -137,19 +127,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
     );
   }
 
-  const categoryOptions = categories?.map((item:ICategory) => ({
-    value: item._id,
-    label: item.name,
-  })) || [];
 
-  const subCategoryOptions = formData.category
-    ? subCategories
-        ?.filter((sub:ISubCategory) => sub.category.toString() === formData?.category?.value)
-        .map((item:ISubCategory) => ({
-          value: item._id,
-          label: item.name,
-        })) || []
-    : [];
 
   const unitOptions = uoms
     ?.filter((uom:IUom) => uom.isActive)
@@ -167,61 +145,9 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">
+ 
         <div className="grid gap-2">
-          <Label htmlFor="productCategory">Category</Label>
-          <Select
-            inputId="productCategory"
-            options={categoryOptions}
-            value={formData.category}
-            onChange={(value) => value && handleChange("category", value)}
-            placeholder="Search or select category"
-            isClearable
-            isSearchable
-            classNamePrefix="react-select"
-            styles={{
-              control: (base) => ({
-                ...base,
-                borderColor: "#e2e8f0",
-                padding: "2px",
-                "&:hover": { borderColor: "#cbd5e1" },
-              }),
-              menu: (base) => ({
-                ...base,
-                zIndex: 9999,
-              }),
-            }}
-            aria-label="Select product category"
-          />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="productSubcategory">Subcategory</Label>
-          <Select
-            inputId="productSubcategory"
-            options={subCategoryOptions}
-            value={formData.subCategory}
-            onChange={(value) => handleChange("subCategory", value)}
-            placeholder="Search or select subcategory"
-            isClearable
-            isSearchable
-            isDisabled={!formData.category}
-            classNamePrefix="react-select"
-            styles={{
-              control: (base) => ({
-                ...base,
-                borderColor: "#e2e8f0",
-                padding: "2px",
-                "&:hover": { borderColor: "#cbd5e1" },
-              }),
-              menu: (base) => ({
-                ...base,
-                zIndex: 9999,
-              }),
-            }}
-            aria-label="Select product subcategory"
-          />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="productName">IProduct Name</Label>
+          <Label htmlFor="productName">Product Name</Label>
           <Input
             id="productName"
             placeholder="Enter product name"
@@ -313,8 +239,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
           onClick={handleSubmit}
           disabled={
             loading ||
-            !formData.category ||
-            !formData.subCategory ||
             !formData.productName ||
             !formData.price ||
             !formData.unitOfMeasure ||
@@ -324,7 +248,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
           }
           aria-label="Update product"
         >
-          {loading ? <Loader2 className="animate-spin" /> : "Update IProduct"}
+          {loading ? <Loader2 className="animate-spin" /> : "Update Product"}
         </Button>
       </div>
     </DialogContent>

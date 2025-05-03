@@ -10,15 +10,12 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Select from "react-select";
-import useCategoryStore from "@/store/useCategoryStore";
 import useUomStore from "@/store/useUomStore";
 import { Loader2, X } from "lucide-react";
 import useProducts from "@/hooks/use-product";
 import useProductStore from "@/store/useProductStore";
 import { toast } from "sonner";
-import { ISubCategory } from "@/interfaces/ISubCategory";
 import { IUom } from "@/interfaces/IUom";
-import { ICategory } from "@/interfaces/ICategory";
 import { IProduct } from "@/interfaces/IProduct";
 
 // Define interfaces
@@ -31,8 +28,7 @@ interface SelectOption {
 }
 
 interface FormData {
-  category: SelectOption | null;
-  subcategory: SelectOption | null;
+
   productName: string;
   price: string;
   unitOfMeasure: string;
@@ -47,13 +43,11 @@ interface Props {
 
 // Define the component with typed props
 const ProductModal: React.FC<Props> = ({ handleCloseDialog }) => {
-  const { categories, subCategories, loading: categoryLoading, initializeAuth } = useCategoryStore();
   const { uoms, loading: uomLoading, initalize } = useUomStore(); // Fixed typo: initalize -> initialize
   const { addProducts, loading: productLoading } = useProducts();
   const { refetch } = useProductStore();
   const [formData, setFormData] = useState<FormData>({
-    category: null,
-    subcategory: null,
+    
     productName: "",
     price: "",
     unitOfMeasure: "",
@@ -63,29 +57,27 @@ const ProductModal: React.FC<Props> = ({ handleCloseDialog }) => {
   });
 
   useEffect(() => {
-    initializeAuth(); // Initialize category data
+     // Initialize category data
     initalize(); // Initialize UOM data
-  }, [initializeAuth]);
+  }, [initalize]);
 
   const handleChange = (field: keyof FormData, value: SelectOption | string | null) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
       // Reset subcategory when category changes
-      ...(field === "category" ? { subcategory: null } : {}),
     }));
   };
 
   const handleSubmit = async () => {
-    const { category, subcategory, productName, price, unitOfMeasure, hsnSacCode, gstRate, stock } = formData;
-    if (!category || !subcategory || !productName || !price || !unitOfMeasure || !hsnSacCode || !gstRate || !stock) {
+    const { productName, price, unitOfMeasure, hsnSacCode, gstRate, stock } = formData;
+    if (!productName || !price || !unitOfMeasure || !hsnSacCode || !gstRate || !stock) {
       toast.error("Please fill in all required fields.");
       return;
     }
 
     const data: Partial<IProduct> = {
-      categoryId: category.value,
-      subcategoryId: subcategory.value,
+     
       productName,
       price: parseFloat(price),
       unitOfMeasure: unitOfMeasure,
@@ -108,7 +100,7 @@ const ProductModal: React.FC<Props> = ({ handleCloseDialog }) => {
     }
   };
 
-  if (categoryLoading || uomLoading) {
+  if ( uomLoading) {
     return (
       <div className="h-full flex items-center justify-center">
         <Loader2 className="animate-spin" />
@@ -116,19 +108,7 @@ const ProductModal: React.FC<Props> = ({ handleCloseDialog }) => {
     );
   }
 
-  const categoryOptions: SelectOption[] = categories?.map((item: ICategory) => ({
-    value: item._id,
-    label: item.name,
-  })) || [];
 
-  const subcategoryOptions: SelectOption[] = formData.category
-    ? subCategories
-        ?.filter((sub: ISubCategory) => sub.category === formData?.category?.value)
-        .map((item: ISubCategory) => ({
-          value: item._id,
-          label: item.name,
-        })) || []
-    : [];
 
   const unitOptions: SelectOption[] = uoms
     ?.filter((uom: IUom) => uom.isActive)
@@ -157,57 +137,7 @@ const ProductModal: React.FC<Props> = ({ handleCloseDialog }) => {
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">
-        <div className="grid gap-2">
-          <Label htmlFor="productCategory">Category</Label>
-          <Select
-            inputId="productCategory"
-            options={categoryOptions}
-            value={formData.category}
-            onChange={(value: SelectOption | null) => handleChange("category", value)}
-            placeholder="Search or select category"
-            isClearable
-            isSearchable
-            classNamePrefix="react-select"
-            styles={{
-              control: (base) => ({
-                ...base,
-                borderColor: "#e2e8f0",
-                padding: "2px",
-                "&:hover": { borderColor: "#cbd5e1" },
-              }),
-              menu: (base) => ({
-                ...base,
-                zIndex: 9999,
-              }),
-            }}
-          />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="productSubcategory">Subcategory</Label>
-          <Select
-            inputId="productSubcategory"
-            options={subcategoryOptions}
-            value={formData.subcategory}
-            onChange={(value: SelectOption | null) => handleChange("subcategory", value)}
-            placeholder="Search or select subcategory"
-            isClearable
-            isSearchable
-            isDisabled={!formData.category}
-            classNamePrefix="react-select"
-            styles={{
-              control: (base) => ({
-                ...base,
-                borderColor: "#e2e8f0",
-                padding: "2px",
-                "&:hover": { borderColor: "#cbd5e1" },
-              }),
-              menu: (base) => ({
-                ...base,
-                zIndex: 9999,
-              }),
-            }}
-          />
-        </div>
+     
         <div className="grid gap-2">
           <Label htmlFor="productName">Product Name</Label>
           <Input
@@ -305,8 +235,7 @@ const ProductModal: React.FC<Props> = ({ handleCloseDialog }) => {
           onClick={handleSubmit}
           disabled={
             productLoading ||
-            !formData.category ||
-            !formData.subcategory ||
+           
             !formData.productName ||
             !formData.price ||
             !formData.unitOfMeasure ||
