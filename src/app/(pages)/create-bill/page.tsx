@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { PlusCircle, ChevronLeft, X } from "lucide-react";
+import { PlusCircle, ChevronLeft, X, Loader2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -632,6 +632,7 @@ const CreateBillPage: React.FC = () => {
                         size="lg"
                         disabled={loading}
                       >
+                        {loading ? <Loader2 className="animate-spin" /> : "Generate Bill"}
                         Generate Bill
                       </Button>
                       <Button
