@@ -23,6 +23,7 @@ import { Button } from "../ui/button";
 import useBillStore from "@/store/useBillStore";
 import useDashboardStore from "@/store/useDashboardStore";
 import { IBiill } from "@/interfaces/IBill";
+import { useRouter } from "next/navigation";
 
 // Define interfaces for data structures
 
@@ -45,7 +46,8 @@ interface ChartData {
 
 const Overview: React.FC = () => {
   const { bills, initalize } = useBillStore();
-  const { data, initalize: fetchSalesData } = useDashboardStore();
+  const router=useRouter()
+  const { data, initalize: fetchSalesData,status } = useDashboardStore();
   const [currentMonth, setCurrentMonth] = useState<MonthWiseData | null>(null);
   const [monthWise, setMonthWise] = useState<MonthWise | null>(null);
   const [today, setToday] = useState<MonthWiseData | null>(null);
@@ -87,7 +89,16 @@ const Overview: React.FC = () => {
     if (bills && data) return;
     initalize();
     fetchSalesData();
+    
+ 
   }, [bills, data, initalize, fetchSalesData]);
+
+  useEffect(()=>{
+    if(status===401){
+      localStorage.clear()
+      router.push("/");
+    }
+  },[status]);
 
   // Format date for display
   const formatDate = (dateStr: string): string => {

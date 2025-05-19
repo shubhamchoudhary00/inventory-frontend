@@ -68,9 +68,14 @@ const LoginPage: React.FC = () => {
     try {
       const data = await login({ name: username, password });
       if (data.success) {
+   
         setUser(data.data.user);
         localStorage.setItem("token", data.data.token);
         toast.success("Logged in successfully");
+
+        setTimeout(()=>{
+
+        },2000);
         router.push("/dashboard");
       } else {
         setError("Invalid credentials");

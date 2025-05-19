@@ -34,7 +34,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
   const [product, setProduct] = useState<IProduct | undefined>(undefined);
   const [formData, setFormData] = useState({
     productName: "",
-    price: "",
     unitOfMeasure: "",
     hsnSacCode: "",
     gstRate: "",
@@ -56,7 +55,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
       setFormData({
       
         productName: product.productName || "",
-        price: product.price?.toString() || "",
         unitOfMeasure: typeof product.unitOfMeasure === 'object' ? product.unitOfMeasure?._id || "" : product.unitOfMeasure || "",
         hsnSacCode: product.hsnSacCode || "",
         gstRate: product.gstRate?.toString() || "",
@@ -83,18 +81,17 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
   };
 
   const handleSubmit = async () => {
-    const { productName, price, unitOfMeasure, hsnSacCode, gstRate, stock } = formData;
+    const { productName,  unitOfMeasure, hsnSacCode, gstRate, stock } = formData;
 
-    if ( !productName || !price || !unitOfMeasure || !hsnSacCode || !gstRate || !stock) {
+    if ( !productName ||  !unitOfMeasure || !hsnSacCode || !gstRate || !stock) {
       alert("Please fill in all required fields.");
       return;
     }
 
-    const parsedPrice = parseFloat(price);
     const parsedGstRate = parseFloat(gstRate);
     const parsedStock = parseInt(stock);
 
-    if (parsedPrice <= 0 || parsedGstRate < 0 || parsedStock < 0) {
+    if ( parsedGstRate < 0 || parsedStock < 0) {
       alert("Price must be positive, GST rate must be non-negative, and stock must be non-negative.");
       return;
     }
@@ -102,7 +99,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
     const data:Partial<IProduct> = {
  
       productName,
-      price: parsedPrice,
       unitOfMeasure,
       hsnSacCode,
       gstRate: parsedGstRate,
@@ -156,19 +152,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
             aria-label="IProduct name"
           />
         </div>
-        <div className="grid gap-2">
-          <Label htmlFor="productPrice">Price (without tax)</Label>
-          <Input
-            id="productPrice"
-            type="number"
-            placeholder="0.00"
-            value={formData.price}
-            onChange={(e) => handleChange("price", e.target.value)}
-            min="0"
-            step="0.01"
-            aria-label="IProduct price"
-          />
-        </div>
+      
         <div className="grid gap-2">
           <Label htmlFor="unitOfMeasure">Unit of Measure</Label>
           <Select
@@ -240,7 +224,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ setOpenDialog, prod
           disabled={
             loading ||
             !formData.productName ||
-            !formData.price ||
             !formData.unitOfMeasure ||
             !formData.hsnSacCode ||
             !formData.gstRate ||

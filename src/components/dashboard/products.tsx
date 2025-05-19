@@ -107,9 +107,9 @@ const Products = ({ handleOpenDialog }: { handleOpenDialog: (data: string) => vo
                     Product Name
                   </th>
                  
-                  <th scope="col" className="px-4 py-3 text-right">
+                  {/* <th scope="col" className="px-4 py-3 text-right">
                     Price
-                  </th>
+                  </th> */}
                   <th scope="col" className="px-4 py-3 text-right">
                     GST Rate
                   </th>
@@ -131,9 +131,9 @@ const Products = ({ handleOpenDialog }: { handleOpenDialog: (data: string) => vo
                       <td className="px-4 py-3">{item._id.slice(6)}</td>
                       <td className="px-4 py-3 font-medium">{item.productName}</td>
                       {/* <td className="px-4 py-3">{item.category?.name?.toUpperCase() || "N/A"}</td> */}
-                      <td className="px-4 py-3 text-right">
+                      {/* <td className="px-4 py-3 text-right">
                         {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.price)}
-                      </td>
+                      </td> */}
                       <td className="px-4 py-3 text-right">{item.gstRate}%</td>
                       <td className="px-4 py-3 text-right">{item.hsnSacCode}</td>
                       <td className="px-4 py-3 text-center">{item.stock}</td>
