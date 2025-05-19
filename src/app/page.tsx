@@ -42,7 +42,7 @@ const LoginPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [isClient, setIsClient] = useState<boolean>(false);
+  const [, setIsClient] = useState<boolean>(false);
   const { login } = useAuthHook() as AuthHook;
   const { setUser } = userStore();
 
@@ -51,15 +51,7 @@ const LoginPage: React.FC = () => {
     setIsClient(true); // Mark as client-side after mount
   }, []);
 
-  // Check token and redirect if authenticated
-  useEffect(() => {
-    if (isClient) {
-      const token = localStorage.getItem("token");
-      if (token) {
-        router.push("/dashboard");
-      }
-    }
-  }, [isClient, router]);
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

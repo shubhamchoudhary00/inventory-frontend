@@ -30,7 +30,6 @@ interface SelectOption {
 interface FormData {
 
   productName: string;
-  price: string;
   unitOfMeasure: string;
   hsnSacCode: string;
   gstRate: string;
@@ -49,7 +48,6 @@ const ProductModal: React.FC<Props> = ({ handleCloseDialog }) => {
   const [formData, setFormData] = useState<FormData>({
     
     productName: "",
-    price: "",
     unitOfMeasure: "",
     hsnSacCode: "",
     gstRate: "",
@@ -70,8 +68,8 @@ const ProductModal: React.FC<Props> = ({ handleCloseDialog }) => {
   };
 
   const handleSubmit = async () => {
-    const { productName, price, unitOfMeasure, hsnSacCode, gstRate, stock } = formData;
-    if (!productName || !price || !unitOfMeasure || !hsnSacCode || !gstRate || !stock) {
+    const { productName,  unitOfMeasure, hsnSacCode, gstRate, stock } = formData;
+    if (!productName || !unitOfMeasure || !hsnSacCode || !gstRate || !stock) {
       toast.error("Please fill in all required fields.");
       return;
     }
@@ -79,7 +77,6 @@ const ProductModal: React.FC<Props> = ({ handleCloseDialog }) => {
     const data: Partial<IProduct> = {
      
       productName,
-      price: parseFloat(price),
       unitOfMeasure: unitOfMeasure,
       hsnSacCode,
       gstRate: parseFloat(gstRate),
@@ -93,12 +90,23 @@ const ProductModal: React.FC<Props> = ({ handleCloseDialog }) => {
       }
       toast.success("Product added successfully");
       refetch();
+      reset();
       handleCloseDialog();
     } catch (error) {
       toast.error("Failed to add product. Please try again.");
       console.error(error);
     }
   };
+
+  const reset=()=>{
+    setFormData({
+      productName:"",
+      stock:"",
+      hsnSacCode:"",
+      gstRate:"",
+      unitOfMeasure:""
+    })
+  }
 
   if ( uomLoading) {
     return (
@@ -149,20 +157,7 @@ const ProductModal: React.FC<Props> = ({ handleCloseDialog }) => {
             }
           />
         </div>
-        <div className="grid gap-2">
-          <Label htmlFor="productPrice">Price (without tax)</Label>
-          <Input
-            id="productPrice"
-            type="number"
-            placeholder="0.00"
-            value={formData.price}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleChange("price", e.target.value)
-            }
-            min="0"
-            step="0.01"
-          />
-        </div>
+       
         <div className="grid gap-2">
           <Label htmlFor="unitOfMeasure">Unit of Measure</Label>
           <Select
@@ -237,7 +232,6 @@ const ProductModal: React.FC<Props> = ({ handleCloseDialog }) => {
             productLoading ||
            
             !formData.productName ||
-            !formData.price ||
             !formData.unitOfMeasure ||
             !formData.hsnSacCode ||
             !formData.gstRate ||

@@ -24,17 +24,13 @@ import { IUom } from "@/interfaces/IUom";
 import useBillStore from "@/store/useBillStore";
 
 // Define interfaces for data structures
-
-
 interface ProductOption {
   value: string;
   label: string;
-  price: number;
   gstRate: number;
   hsnSacCode: string;
   unitOfMeasure?: string;
 }
-
 
 interface CustomerData {
   name: string;
@@ -58,15 +54,17 @@ interface BillSummary {
   total: number;
 }
 
-
+interface Item extends Items {
+  price: number;
+}
 
 const CreateBillPage: React.FC = () => {
-  const { products, loading,refetch,  initalize } = useProductStore();
-  const {refetch:billRefetch}=useBillStore();
+  const { products, loading, refetch, initalize } = useProductStore();
+  const { refetch: billRefetch } = useBillStore();
   const [billType, setBillType] = useState<"local" | "interstate">("local");
   const [gstStatus, setGstStatus] = useState<"withGst" | "withoutGst">("withGst");
   const router = useRouter();
-  const [items, setItems] = useState<Items[]>([{ product: null, quantity: 1 }]);
+  const [items, setItems] = useState<Item[]>([{ product: null, quantity: 1, price: 0 }]);
   const [customerData, setCustomerData] = useState<CustomerData>({
     name: "",
     contact: "",
@@ -76,13 +74,13 @@ const CreateBillPage: React.FC = () => {
 
   const { addBill } = useBill();
 
-useEffect(()=>{
-  if(products) return;
-  initalize();
-},[])
+  useEffect(() => {
+    if (products) return;
+    initalize();
+  }, []);
 
   const handleAddItem = () => {
-    setItems([...items, { product: null, quantity: 1 }]);
+    setItems([...items, { product: null, quantity: 1, price: 0 }]);
   };
 
   const handleRemoveItem = (index: number) => {
@@ -95,8 +93,8 @@ useEffect(()=>{
 
   const handleItemChange = (
     index: number,
-    field: "product" | "quantity",
-    value: IBillProduct | null | string
+    field: "product" | "quantity" | "price",
+    value: IBillProduct | null | string | number
   ) => {
     const updatedItems = [...items];
     if (field === "product") {
@@ -106,6 +104,11 @@ useEffect(()=>{
         ...updatedItems[index],
         quantity: parseInt(value as string) || 1,
       };
+    } else if (field === "price") {
+      updatedItems[index] = {
+        ...updatedItems[index],
+        price: parseFloat(value as string) || 0,
+      };
     }
     setItems(updatedItems);
   };
@@ -114,19 +117,21 @@ useEffect(()=>{
     setCustomerData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const calculateItemTotal = (item: Items): number => {
-    if (!item.product) return 0;
-    const baseAmount = item.product.price * item.quantity;
+  const calculateItemTotal = (item: Item): number => {
+    if (!item.product || item.price === 0) return 0;
+    const baseAmount = item.price * item.quantity;
     if (gstStatus === "withoutGst") return baseAmount;
 
     const gstAmount = (baseAmount * item.product.gstRate) / 100;
     return baseAmount + gstAmount;
   };
 
-  const calculateTaxes = (item: Items): Taxes => {
-    if (!item.product || gstStatus === "withoutGst") return { sgst: 0, cgst: 0, igst: 0 };
+  const calculateTaxes = (item: Item): Taxes => {
+    if (!item.product || gstStatus === "withoutGst" || item.price === 0) {
+      return { sgst: 0, cgst: 0, igst: 0 };
+    }
 
-    const baseAmount = item.product.price * item.quantity;
+    const baseAmount = item.price * item.quantity;
     const gstAmount = (baseAmount * item.product.gstRate) / 100;
 
     if (billType === "local") {
@@ -150,8 +155,8 @@ useEffect(()=>{
     let igstTotal = 0;
 
     items.forEach((item) => {
-      if (!item.product) return;
-      const baseAmount = item.product.price * item.quantity;
+      if (!item.product || item.price === 0) return;
+      const baseAmount = item.price * item.quantity;
       subtotal += baseAmount;
 
       if (gstStatus === "withGst") {
@@ -173,25 +178,24 @@ useEffect(()=>{
     };
   };
 
-  const productOptions: ProductOption[] = products && products?.map((product: IProduct) => ({
-    value: product._id,
-    label: `${product.productName}`,
-    price: product.price,
-    gstRate: product.gstRate,
-    hsnSacCode: product.hsnSacCode,
-    unitOfMeasure: (product.unitOfMeasure as IUom)?.uom_short,
-  })) || [];
+  const productOptions: ProductOption[] =
+    products?.map((product: IProduct) => ({
+      value: product._id,
+      label: `${product.productName}`,
+      gstRate: product.gstRate,
+      hsnSacCode: product.hsnSacCode,
+      unitOfMeasure: (product.unitOfMeasure as IUom)?.uom_short,
+    })) || [];
 
   const summary = calculateBillSummary();
 
   const handleSubmit = async () => {
     if (
       !customerData.name ||
-      !customerData.contact ||
       !customerData.paymentMethod ||
-      items.some((item) => !item.product)
+      items.some((item) => !item.product || item.price === 0)
     ) {
-      alert("Please fill all required fields");
+      alert("Please fill all required fields including item prices");
       return;
     }
 
@@ -204,13 +208,11 @@ useEffect(()=>{
     };
 
     const res = await addBill(payload);
-    // console.log("res", res);
-
     if (res && res.success) {
       toast.success("Bill generated successfully");
       reset();
       billRefetch();
-      refetch()
+      refetch();
       return;
     }
     toast.error("Something went wrong");
@@ -223,7 +225,7 @@ useEffect(()=>{
       paymentMethod: "",
       billDate: new Date().toISOString().split("T")[0],
     });
-    setItems([{ product: null, quantity: 1 }]);
+    setItems([{ product: null, quantity: 1, price: 0 }]);
   };
 
   const onCancel = () => {
@@ -374,10 +376,10 @@ useEffect(()=>{
                 <CardContent>
                   <div className="space-y-3">
                     <div className="grid grid-cols-12 gap-2 text-xs font-medium text-gray-500 px-2 py-1">
-                      <div className="col-span-6">Product</div>
+                      <div className="col-span-5">Product</div>
                       <div className="col-span-1 text-center">Qty</div>
                       <div className="col-span-2 text-right">Unit Price</div>
-                      <div className="col-span-2 text-right">Total</div>
+                      <div className="col-span-3 text-right">Total</div>
                       <div className="col-span-1"></div>
                     </div>
 
@@ -386,22 +388,22 @@ useEffect(()=>{
                         key={index}
                         className="grid grid-cols-12 gap-2 bg-gray-50 border border-gray-200 rounded-md p-2 items-center"
                       >
-                        <div className="col-span-6">
-                        <ReactSelect
-                          options={productOptions}
-                          value={item.product}
-                          onChange={(value: ProductOption | null) =>
-                            handleItemChange(index, "product", value as IBillProduct | null)
-                          }
-                          placeholder="Select product"
-                          isClearable
-                          isSearchable
-                          className="text-sm"
-                          classNamePrefix="react-select"
-                          styles={{
-                            control: (base) => ({
-                              ...base,
-                              minHeight: "36px",
+                        <div className="col-span-5">
+                          <ReactSelect
+                            options={productOptions}
+                            value={item.product}
+                            onChange={(value: ProductOption | null) =>
+                              handleItemChange(index, "product", value as IBillProduct | null)
+                            }
+                            placeholder="Select product"
+                            isClearable
+                            isSearchable
+                            className="text-sm"
+                            classNamePrefix="react-select"
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                minHeight: "36px",
                                 height: "36px",
                               }),
                               valueContainer: (base) => ({
@@ -427,15 +429,21 @@ useEffect(()=>{
                             className="h-9 text-center p-1"
                           />
                         </div>
-                        <div className="col-span-2 text-right">
-                          {item.product ? (
-                            <div className="text-sm">₹{item.product.price.toFixed(2)}</div>
-                          ) : (
-                            <div className="text-sm text-gray-400">-</div>
-                          )}
+                        <div className="col-span-2">
+                          <Input
+                            type="number"
+                            value={item.price}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                              handleItemChange(index, "price", e.target.value)
+                            }
+                            min="0"
+                            step="0.01"
+                            placeholder="Enter price"
+                            className="h-9 text-right p-1"
+                          />
                         </div>
-                        <div className="col-span-2 text-right font-medium">
-                          {item.product ? (
+                        <div className="col-span-3 text-right font-medium">
+                          {item.product && item.price ? (
                             <div className="text-sm">
                               ₹{calculateItemTotal(item).toFixed(2)}
                             </div>
@@ -451,12 +459,12 @@ useEffect(()=>{
                               onClick={() => handleRemoveItem(index)}
                               className="h-8 w-8 p-0"
                             >
-                              <X className="h-4 w-4 text-red-500" />
+                              <X className="h0h-4 w-4 text-red-500" />
                             </Button>
                           )}
                         </div>
 
-                        {item.product && gstStatus === "withGst" && (
+                        {item.product && gstStatus === "withGst" && item.price > 0 && (
                           <div className="col-span-12 mt-1 pt-1 border-t border-gray-200 text-xs text-gray-500">
                             <div className="flex flex-wrap gap-x-4">
                               <span>GST Rate: {item.product.gstRate}%</span>
@@ -499,7 +507,7 @@ useEffect(()=>{
                     </Button>
                   </div>
 
-                  {items.some((item) => item.product) && (
+                  {items.some((item) => item.product && item.price > 0) && (
                     <div className="mt-6">
                       <h3 className="text-sm font-medium mb-2">Bill Items Summary</h3>
                       <div className="rounded-md border">
@@ -511,15 +519,15 @@ useEffect(()=>{
                               <th className="px-3 py-2 text-right">Unit Price</th>
                               <th className="px-3 py-2 text-right">Subtotal</th>
                               {gstStatus === "withGst" && (
-                                <th className="px-3(py-2 text-right">Tax</th>
+                                <th className="px-3 py-2 text-right">Tax</th>
                               )}
                               <th className="px-3 py-2 text-right">Total</th>
                             </tr>
                           </thead>
                           <tbody>
                             {items.map((item, index) => {
-                              if (!item.product) return null;
-                              const baseAmount = item.product.price * item.quantity;
+                              if (!item.product || item.price === 0) return null;
+                              const baseAmount = item.price * item.quantity;
                               const taxes = calculateTaxes(item);
                               const totalTax = taxes.sgst + taxes.cgst + taxes.igst;
 
@@ -530,7 +538,7 @@ useEffect(()=>{
                                     {item.quantity}
                                   </td>
                                   <td className="px-3 py-2 text-sm text-right">
-                                    ₹{item.product.price.toFixed(2)}
+                                    ₹{item.price.toFixed(2)}
                                   </td>
                                   <td className="px-3 py-2 text-sm text-right">
                                     ₹{baseAmount.toFixed(2)}
@@ -643,6 +651,5 @@ useEffect(()=>{
       </main>
     </div>
   );
-};
-
+}
 export default CreateBillPage;

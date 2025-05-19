@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import useUom from '@/hooks/use-uom';
+import useUomStore from '@/store/useUomStore';
 
 interface UOMModalProps {
   isOpen: boolean;
@@ -28,6 +29,7 @@ export default function UOMModal({ isOpen, onClose }: UOMModalProps) {
     isActive: true,
   });
   const { loading, addUom } = useUom();
+  const {refetch}=useUomStore()
 
   const handleInputChange = (field: keyof UOMData, value: string | boolean) => {
     setUomData((prev) => ({
@@ -54,13 +56,23 @@ export default function UOMModal({ isOpen, onClose }: UOMModalProps) {
       if (res.success) {
         toast.success("Unit of Measure added successfully");
         // onSave(uomData);
+        reset();
         onClose();
+        refetch();
         return;
       }
     }
   
     toast.error("Something went wrong");
   };
+
+  const reset=()=>{
+    setUomData({
+      uom: '',
+      uom_short: '',
+      isActive: true,
+    })
+  }
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
