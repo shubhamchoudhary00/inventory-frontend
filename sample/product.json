@@ -1,0 +1,67 @@
+{
+    "_id": {
+      "$oid": "680cf6af50561dc41fce77c6"
+    },
+    "customer": {
+      "name": "rahul",
+      "contact": "9877443155",
+      "paymentMethod": "card",
+      "billDate": {
+        "$date": "2025-04-26T00:00:00.000Z"
+      }
+    },
+    "items": [
+      {
+        "product": {
+          "value": "680b96df5d7e2f7b946a2f94",
+          "label": "ralph lauren (kg)",
+          "price": 100,
+          "gstRate": 18,
+          "hsnSacCode": 564522,
+          "unitOfMeasure": "kg",
+          "_id": {
+            "$oid": "680cf6af50561dc41fce77c8"
+          }
+        },
+        "quantity": 1,
+        "_id": {
+          "$oid": "680cf6af50561dc41fce77c7"
+        }
+      },
+      {
+        "product": {
+          "value": "680bc398b96377d86f0388c1",
+          "label": "Roman (mm)",
+          "price": 500,
+          "gstRate": 12,
+          "hsnSacCode": 12252,
+          "unitOfMeasure": "mm",
+          "_id": {
+            "$oid": "680cf6af50561dc41fce77ca"
+          }
+        },
+        "quantity": 1,
+        "_id": {
+          "$oid": "680cf6af50561dc41fce77c9"
+        }
+      }
+    ],
+    "billType": "local",
+    "gstStatus": "withGst",
+    "summary": {
+      "subtotal": 600,
+      "sgstTotal": 39,
+      "cgstTotal": 39,
+      "igstTotal": 0,
+      "totalTax": 78,
+      "total": 678,
+      "_id": {
+        "$oid": "680cf6af50561dc41fce77cb"
+      }
+    },
+    "invoiceNo": "M9YCTTLBFMJ2",
+    "createdAt": {
+      "$date": "2025-04-26T15:07:27.904Z"
+    },
+    "__v": 0
+  }

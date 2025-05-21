@@ -9,6 +9,8 @@ import useStore from "@/store/useStore";
 import { Dialog, DialogTrigger } from "../ui/dialog";
 import EditProductModal from "../modals/edit-product-modal";
 import { Input } from "../ui/input"; // Assuming Input component exists in your UI library
+import { IUom } from "@/interfaces/IUom";
+import useProducts from "@/hooks/use-product";
 
 interface Product {
   _id: string;
@@ -18,14 +20,17 @@ interface Product {
   gstRate: number;
   hsnSacCode: string;
   stock: number;
+  unitOfMeasure:IUom ;
 }
 
 const Products = ({ handleOpenDialog }: { handleOpenDialog: (data: string) => void }) => {
-  const { products, loading, initalize } = useProductStore() as {
+  const { products, loading, initalize,refetch } = useProductStore() as {
     products: Product[];
     loading: boolean;
     initalize: () => void;
+    refetch: () => void;
   };
+  const {deleteProduct}=useProducts()
   const { openDialog, setOpenDialog, setProductId, productId } = useStore();
   // const { deleteProduct } = useProducts();
   const [searchQuery, setSearchQuery] = useState<string>(""); // State for search input
@@ -58,11 +63,12 @@ const Products = ({ handleOpenDialog }: { handleOpenDialog: (data: string) => vo
     }
   };
 
-  // const handleDelete = async (id: string) => {
-  //   if (confirm("The data will be deleted permanently. Are you sure?")) {
-  //     await deleteProduct(id);
-  //   }
-  // };
+  const handleDelete = async (id: string) => {
+    if (confirm("The data will be deleted permanently. Are you sure?")) {
+      await deleteProduct(id);
+      await refetch()
+    }
+  };
 
   if (loading) {
     return (
@@ -107,9 +113,9 @@ const Products = ({ handleOpenDialog }: { handleOpenDialog: (data: string) => vo
                     Product Name
                   </th>
                  
-                  {/* <th scope="col" className="px-4 py-3 text-right">
-                    Price
-                  </th> */}
+                  <th scope="col" className="px-4 py-3 text-right">
+                    UOM
+                  </th>
                   <th scope="col" className="px-4 py-3 text-right">
                     GST Rate
                   </th>
@@ -130,7 +136,7 @@ const Products = ({ handleOpenDialog }: { handleOpenDialog: (data: string) => vo
                     <tr key={item._id} className="border-b hover:bg-gray-50">
                       <td className="px-4 py-3">{item._id.slice(6)}</td>
                       <td className="px-4 py-3 font-medium">{item.productName}</td>
-                      {/* <td className="px-4 py-3">{item.category?.name?.toUpperCase() || "N/A"}</td> */}
+                      <td className="px-4 py-3 text-right">{item.unitOfMeasure?.uom_short?.toUpperCase() || "N/A"}</td>
                       {/* <td className="px-4 py-3 text-right">
                         {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.price)}
                       </td> */}
@@ -166,7 +172,7 @@ const Products = ({ handleOpenDialog }: { handleOpenDialog: (data: string) => vo
                             </DialogTrigger>
                             <EditProductModal setOpenDialog={setOpenDialog} productId={item._id} />
                           </Dialog>
-                          {/* <Button
+                          <Button
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
@@ -187,7 +193,7 @@ const Products = ({ handleOpenDialog }: { handleOpenDialog: (data: string) => vo
                                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                               />
                             </svg>
-                          </Button> */}
+                          </Button>
                         </div>
                       </td>
                     </tr>

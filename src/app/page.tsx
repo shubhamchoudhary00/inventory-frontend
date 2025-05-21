@@ -75,7 +75,7 @@ const LoginPage: React.FC = () => {
 
         setTimeout(()=>{
 
-        },2000);
+        },500);
         router.push("/dashboard");
       } else {
         setError("Invalid credentials");
